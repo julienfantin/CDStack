@@ -27,7 +27,18 @@
 		711C948A163684F400A37612 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 711C945A163684F400A37612 /* Foundation.framework */; };
 		711C948B163684F400A37612 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 711C945E163684F400A37612 /* CoreData.framework */; };
 		711C9493163684F400A37612 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 711C9491163684F400A37612 /* InfoPlist.strings */; };
-		711C9496163684F400A37612 /* CDStackTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 711C9495163684F400A37612 /* CDStackTests.m */; };
+		711C9496163684F400A37612 /* CDStackSpecs.m in Sources */ = {isa = PBXBuildFile; fileRef = 711C9495163684F400A37612 /* CDStackSpecs.m */; };
+		7162FCF416371FAB0081FAEE /* CDFetchingSpecs.m in Sources */ = {isa = PBXBuildFile; fileRef = 7162FCF316371FAB0081FAEE /* CDFetchingSpecs.m */; };
+		7162FCF71637C7750081FAEE /* CDStack+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7162FCF61637C7750081FAEE /* CDStack+Helpers.m */; };
+		7162FCF81637C7750081FAEE /* CDStack+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7162FCF61637C7750081FAEE /* CDStack+Helpers.m */; };
+		717B00AE163688EB0006017B /* CDStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00AD163688EB0006017B /* CDStack.m */; };
+		717B00BC16368DE90006017B /* CDStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00AD163688EB0006017B /* CDStack.m */; };
+		717B00BF163695500006017B /* CDAsyncStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00BE163695500006017B /* CDAsyncStore.m */; };
+		717B00C0163695500006017B /* CDAsyncStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00BE163695500006017B /* CDAsyncStore.m */; };
+		717B00C31636961A0006017B /* CDCacheStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00C21636961A0006017B /* CDCacheStore.m */; };
+		717B00C41636961A0006017B /* CDCacheStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00C21636961A0006017B /* CDCacheStore.m */; };
+		717B00C61636B98C0006017B /* CDStack.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 711C9478163684F400A37612 /* CDStack.xcdatamodeld */; };
+		8C2399E3604F46D3A4A078FD /* libPods-test.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF4C8166A1D24B80956645AD /* libPods-test.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,10 +53,10 @@
 
 /* Begin PBXFileReference section */
 		711C9454163684F400A37612 /* CDStack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CDStack.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		711C9458163684F400A37612 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		711C945A163684F400A37612 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		711C9458163684F400A37612 /* UIKit.framework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		711C945A163684F400A37612 /* Foundation.framework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		711C945C163684F400A37612 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		711C945E163684F400A37612 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		711C945E163684F400A37612 /* CoreData.framework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		711C9462163684F400A37612 /* CDStack-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CDStack-Info.plist"; sourceTree = "<group>"; };
 		711C9464163684F400A37612 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		711C9466163684F400A37612 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -63,11 +74,23 @@
 		711C947E163684F400A37612 /* CDDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDDetailViewController.h; sourceTree = "<group>"; };
 		711C947F163684F400A37612 /* CDDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDDetailViewController.m; sourceTree = "<group>"; };
 		711C9486163684F400A37612 /* CDStackTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CDStackTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		711C9487163684F400A37612 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		711C9487163684F400A37612 /* SenTestingKit.framework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		711C9490163684F400A37612 /* CDStackTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CDStackTests-Info.plist"; sourceTree = "<group>"; };
 		711C9492163684F400A37612 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		711C9494163684F400A37612 /* CDStackTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDStackTests.h; sourceTree = "<group>"; };
-		711C9495163684F400A37612 /* CDStackTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDStackTests.m; sourceTree = "<group>"; };
+		711C9495163684F400A37612 /* CDStackSpecs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDStackSpecs.m; sourceTree = "<group>"; };
+		7162FCF316371FAB0081FAEE /* CDFetchingSpecs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDFetchingSpecs.m; sourceTree = "<group>"; };
+		7162FCF51637C7750081FAEE /* CDStack+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CDStack+Helpers.h"; sourceTree = "<group>"; };
+		7162FCF61637C7750081FAEE /* CDStack+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CDStack+Helpers.m"; sourceTree = "<group>"; };
+		717B00AC163688EB0006017B /* CDStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDStack.h; sourceTree = "<group>"; };
+		717B00AD163688EB0006017B /* CDStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDStack.m; sourceTree = "<group>"; };
+		717B00BD163695500006017B /* CDAsyncStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAsyncStore.h; sourceTree = "<group>"; };
+		717B00BE163695500006017B /* CDAsyncStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAsyncStore.m; sourceTree = "<group>"; };
+		717B00C11636961A0006017B /* CDCacheStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDCacheStore.h; sourceTree = "<group>"; };
+		717B00C21636961A0006017B /* CDCacheStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDCacheStore.m; sourceTree = "<group>"; };
+		717B00C516369EF30006017B /* CDPersistentStoreProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDPersistentStoreProtocol.h; sourceTree = "<group>"; };
+		717B00C71636CDF60006017B /* CDStackTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CDStackTests-Prefix.pch"; sourceTree = "<group>"; };
+		DF4C8166A1D24B80956645AD /* libPods-test.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-test.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F6457E3041B34FD3B9D513E0 /* Pods-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test.xcconfig"; path = "Pods/Pods-test.xcconfig"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +113,7 @@
 				711C9489163684F400A37612 /* UIKit.framework in Frameworks */,
 				711C948A163684F400A37612 /* Foundation.framework in Frameworks */,
 				711C948B163684F400A37612 /* CoreData.framework in Frameworks */,
+				8C2399E3604F46D3A4A078FD /* libPods-test.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +127,7 @@
 				711C948E163684F400A37612 /* CDStackTests */,
 				711C9457163684F400A37612 /* Frameworks */,
 				711C9455163684F400A37612 /* Products */,
+				F6457E3041B34FD3B9D513E0 /* Pods-test.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -123,6 +148,7 @@
 				711C945C163684F400A37612 /* CoreGraphics.framework */,
 				711C945E163684F400A37612 /* CoreData.framework */,
 				711C9487163684F400A37612 /* SenTestingKit.framework */,
+				DF4C8166A1D24B80956645AD /* libPods-test.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -130,15 +156,9 @@
 		711C9460163684F400A37612 /* CDStack */ = {
 			isa = PBXGroup;
 			children = (
-				711C9469163684F400A37612 /* CDAppDelegate.h */,
-				711C946A163684F400A37612 /* CDAppDelegate.m */,
-				711C9472163684F400A37612 /* MainStoryboard_iPhone.storyboard */,
-				711C9475163684F400A37612 /* MainStoryboard_iPad.storyboard */,
-				711C947B163684F400A37612 /* CDMasterViewController.h */,
-				711C947C163684F400A37612 /* CDMasterViewController.m */,
-				711C947E163684F400A37612 /* CDDetailViewController.h */,
-				711C947F163684F400A37612 /* CDDetailViewController.m */,
-				711C9478163684F400A37612 /* CDStack.xcdatamodeld */,
+				717B00B0163688F40006017B /* CoreDataStack */,
+				717B00AA163688D00006017B /* UI */,
+				717B00AB163688D80006017B /* Models */,
 				711C9461163684F400A37612 /* Supporting Files */,
 			);
 			path = CDStack;
@@ -161,8 +181,8 @@
 		711C948E163684F400A37612 /* CDStackTests */ = {
 			isa = PBXGroup;
 			children = (
-				711C9494163684F400A37612 /* CDStackTests.h */,
-				711C9495163684F400A37612 /* CDStackTests.m */,
+				711C9495163684F400A37612 /* CDStackSpecs.m */,
+				7162FCF316371FAB0081FAEE /* CDFetchingSpecs.m */,
 				711C948F163684F400A37612 /* Supporting Files */,
 			);
 			path = CDStackTests;
@@ -173,8 +193,48 @@
 			children = (
 				711C9490163684F400A37612 /* CDStackTests-Info.plist */,
 				711C9491163684F400A37612 /* InfoPlist.strings */,
+				717B00C71636CDF60006017B /* CDStackTests-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		717B00AA163688D00006017B /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				711C9469163684F400A37612 /* CDAppDelegate.h */,
+				711C946A163684F400A37612 /* CDAppDelegate.m */,
+				711C9472163684F400A37612 /* MainStoryboard_iPhone.storyboard */,
+				711C9475163684F400A37612 /* MainStoryboard_iPad.storyboard */,
+				711C947B163684F400A37612 /* CDMasterViewController.h */,
+				711C947C163684F400A37612 /* CDMasterViewController.m */,
+				711C947E163684F400A37612 /* CDDetailViewController.h */,
+				711C947F163684F400A37612 /* CDDetailViewController.m */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		717B00AB163688D80006017B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				711C9478163684F400A37612 /* CDStack.xcdatamodeld */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		717B00B0163688F40006017B /* CoreDataStack */ = {
+			isa = PBXGroup;
+			children = (
+				717B00AC163688EB0006017B /* CDStack.h */,
+				717B00AD163688EB0006017B /* CDStack.m */,
+				717B00C516369EF30006017B /* CDPersistentStoreProtocol.h */,
+				717B00BD163695500006017B /* CDAsyncStore.h */,
+				717B00BE163695500006017B /* CDAsyncStore.m */,
+				717B00C11636961A0006017B /* CDCacheStore.h */,
+				717B00C21636961A0006017B /* CDCacheStore.m */,
+				7162FCF51637C7750081FAEE /* CDStack+Helpers.h */,
+				7162FCF61637C7750081FAEE /* CDStack+Helpers.m */,
+			);
+			name = CoreDataStack;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -205,6 +265,7 @@
 				711C9482163684F400A37612 /* Frameworks */,
 				711C9483163684F400A37612 /* Resources */,
 				711C9484163684F400A37612 /* ShellScript */,
+				21D06B84560E48E59D12506A /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -269,6 +330,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		21D06B84560E48E59D12506A /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-test-resources.sh\"\n";
+		};
 		711C9484163684F400A37612 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -294,6 +369,10 @@
 				711C947A163684F400A37612 /* CDStack.xcdatamodeld in Sources */,
 				711C947D163684F400A37612 /* CDMasterViewController.m in Sources */,
 				711C9480163684F400A37612 /* CDDetailViewController.m in Sources */,
+				717B00AE163688EB0006017B /* CDStack.m in Sources */,
+				717B00BF163695500006017B /* CDAsyncStore.m in Sources */,
+				717B00C31636961A0006017B /* CDCacheStore.m in Sources */,
+				7162FCF71637C7750081FAEE /* CDStack+Helpers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,7 +380,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				711C9496163684F400A37612 /* CDStackTests.m in Sources */,
+				711C9496163684F400A37612 /* CDStackSpecs.m in Sources */,
+				717B00BC16368DE90006017B /* CDStack.m in Sources */,
+				717B00C0163695500006017B /* CDAsyncStore.m in Sources */,
+				717B00C41636961A0006017B /* CDCacheStore.m in Sources */,
+				717B00C61636B98C0006017B /* CDStack.xcdatamodeld in Sources */,
+				7162FCF416371FAB0081FAEE /* CDFetchingSpecs.m in Sources */,
+				7162FCF81637C7750081FAEE /* CDStack+Helpers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,6 +491,7 @@
 		711C949A163684F400A37612 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CDStack/CDStack-Prefix.pch";
 				INFOPLIST_FILE = "CDStack/CDStack-Info.plist";
@@ -417,6 +503,7 @@
 		711C949B163684F400A37612 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CDStack/CDStack-Prefix.pch";
 				INFOPLIST_FILE = "CDStack/CDStack-Info.plist";
@@ -427,6 +514,7 @@
 		};
 		711C949D163684F400A37612 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F6457E3041B34FD3B9D513E0 /* Pods-test.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/CDStack.app/CDStack";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -434,7 +522,10 @@
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CDStack/CDStack-Prefix.pch";
+				GCC_PREFIX_HEADER = "CDStackTests/CDStackTests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
+				HEADER_SEARCH_PATHS = "${PODS_HEADERS_SEARCH_PATHS}";
 				INFOPLIST_FILE = "CDStackTests/CDStackTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -444,6 +535,7 @@
 		};
 		711C949E163684F400A37612 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F6457E3041B34FD3B9D513E0 /* Pods-test.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/CDStack.app/CDStack";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -451,7 +543,10 @@
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CDStack/CDStack-Prefix.pch";
+				GCC_PREFIX_HEADER = "CDStackTests/CDStackTests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "";
+				HEADER_SEARCH_PATHS = "${PODS_HEADERS_SEARCH_PATHS}";
 				INFOPLIST_FILE = "CDStackTests/CDStackTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
@@ -478,6 +573,7 @@
 				711C949B163684F400A37612 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		711C949C163684F400A37612 /* Build configuration list for PBXNativeTarget "CDStackTests" */ = {
 			isa = XCConfigurationList;
@@ -486,6 +582,7 @@
 				711C949E163684F400A37612 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
