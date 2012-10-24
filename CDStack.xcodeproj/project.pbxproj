@@ -31,6 +31,7 @@
 		7162FCF416371FAB0081FAEE /* CDFetchingSpecs.m in Sources */ = {isa = PBXBuildFile; fileRef = 7162FCF316371FAB0081FAEE /* CDFetchingSpecs.m */; };
 		7162FCF71637C7750081FAEE /* CDStack+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7162FCF61637C7750081FAEE /* CDStack+Helpers.m */; };
 		7162FCF81637C7750081FAEE /* CDStack+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7162FCF61637C7750081FAEE /* CDStack+Helpers.m */; };
+		7162FCFD16383E490081FAEE /* CDStack+SpecsHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 7162FCFC16383E490081FAEE /* CDStack+SpecsHelpers.m */; };
 		717B00AE163688EB0006017B /* CDStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00AD163688EB0006017B /* CDStack.m */; };
 		717B00BC16368DE90006017B /* CDStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00AD163688EB0006017B /* CDStack.m */; };
 		717B00BF163695500006017B /* CDAsyncStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00BE163695500006017B /* CDAsyncStore.m */; };
@@ -81,6 +82,8 @@
 		7162FCF316371FAB0081FAEE /* CDFetchingSpecs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDFetchingSpecs.m; sourceTree = "<group>"; };
 		7162FCF51637C7750081FAEE /* CDStack+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CDStack+Helpers.h"; sourceTree = "<group>"; };
 		7162FCF61637C7750081FAEE /* CDStack+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CDStack+Helpers.m"; sourceTree = "<group>"; };
+		7162FCFB16383E490081FAEE /* CDStack+SpecsHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CDStack+SpecsHelpers.h"; sourceTree = "<group>"; };
+		7162FCFC16383E490081FAEE /* CDStack+SpecsHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CDStack+SpecsHelpers.m"; sourceTree = "<group>"; };
 		717B00AC163688EB0006017B /* CDStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDStack.h; sourceTree = "<group>"; };
 		717B00AD163688EB0006017B /* CDStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDStack.m; sourceTree = "<group>"; };
 		717B00BD163695500006017B /* CDAsyncStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAsyncStore.h; sourceTree = "<group>"; };
@@ -181,6 +184,8 @@
 		711C948E163684F400A37612 /* CDStackTests */ = {
 			isa = PBXGroup;
 			children = (
+				7162FCFB16383E490081FAEE /* CDStack+SpecsHelpers.h */,
+				7162FCFC16383E490081FAEE /* CDStack+SpecsHelpers.m */,
 				711C9495163684F400A37612 /* CDStackSpecs.m */,
 				7162FCF316371FAB0081FAEE /* CDFetchingSpecs.m */,
 				711C948F163684F400A37612 /* Supporting Files */,
@@ -387,6 +392,7 @@
 				717B00C61636B98C0006017B /* CDStack.xcdatamodeld in Sources */,
 				7162FCF416371FAB0081FAEE /* CDFetchingSpecs.m in Sources */,
 				7162FCF81637C7750081FAEE /* CDStack+Helpers.m in Sources */,
+				7162FCFD16383E490081FAEE /* CDStack+SpecsHelpers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

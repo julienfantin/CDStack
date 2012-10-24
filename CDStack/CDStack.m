@@ -10,22 +10,22 @@
 #import "CDStack+Helpers.h"
 #import "CDCacheStore.h"
 
-
 NSString * const kCDStackManagedObjectContextKey = @"kCDStackManagedObjectContextKey";
 NSString * const kCDStackPersistentStoreCoordinatorKey = @"kCDStackPersistentStoreCoordinatorKey";
 
 @interface CDStack ()
-@property (readonly, strong, nonatomic) NSString *stackID;
 - (void)registerStoreClass:(Class)klass;
-- (NSManagedObjectContext *)managedObjectContextInThread:(NSThread *)thread;
+- (NSManagedObjectContext *)managedObjectContextForThread:(NSThread *)thread;
 - (void)saveContext:(NSManagedObjectContext *)context;
+@property (readonly, strong, nonatomic) NSString *stackID;
 @end
 
 @implementation CDStack
 
+@synthesize parentStack = _parentStack;
 @synthesize stackID = _stackID;
 
-#pragma mark - Path helpers
+#pragma mark - CoreData accessors
 
 + (NSURL *)managedObjectModelURL
 {
@@ -33,31 +33,27 @@ NSString * const kCDStackPersistentStoreCoordinatorKey = @"kCDStackPersistentSto
     return [[NSBundle mainBundle] URLForResource:storeName withExtension:@"momd"];
 }
 
-#pragma - CoreData accessors
-
 + (NSManagedObjectModel *)managedObjectModel
 {
     NSURL *url = [self managedObjectModelURL];
     NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:url];
     
-    // Unit-test target hack...
     if (managedObjectModel == nil) {
+        // Unit-test target hack...
         managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:[NSBundle allBundles]];
     }
 
     NSParameterAssert(managedObjectModel);
-    
     return managedObjectModel;
 }
 
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator
 {
-    NSThread *mainThread = [NSThread mainThread];
-    NSMutableDictionary *dict = mainThread.threadDictionary;
+    NSMutableDictionary *dict = [[NSThread mainThread] threadDictionary];
     
     id key = [self.stackID stringByAppendingString:kCDStackPersistentStoreCoordinatorKey];
-    
     NSPersistentStoreCoordinator *psc = [dict objectForKey:key];
+    
     if (psc == nil) {
         NSManagedObjectModel *model = [[self class] managedObjectModel];
         psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
@@ -67,28 +63,33 @@ NSString * const kCDStackPersistentStoreCoordinatorKey = @"kCDStackPersistentSto
     return psc;
 }
 
-- (NSManagedObjectContext *)managedObjectContextInThread:(NSThread *)thread
+- (NSManagedObjectContext *)managedObjectContextForThread:(NSThread *)thread
 {
-    id key = [self.stackID stringByAppendingString:kCDStackManagedObjectContextKey];
     NSMutableDictionary *dict = thread.threadDictionary;
+
+    id key = [self.stackID stringByAppendingString:kCDStackManagedObjectContextKey];
     NSManagedObjectContext *managedObjectContext = [dict objectForKey:key];
     
     if (managedObjectContext == nil) {
         
-        BOOL isMainThread = [thread isMainThread];
-        
-        NSManagedObjectContextConcurrencyType concurrency = isMainThread ? NSMainQueueConcurrencyType : NSPrivateQueueConcurrencyType;
+        NSManagedObjectContextConcurrencyType concurrency = [thread isMainThread] ? NSMainQueueConcurrencyType : NSPrivateQueueConcurrencyType;
         managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:concurrency];
-
-//        if (isMainThread == NO) {
-//            NSManagedObjectContext *mainContext = [self managedObjectContextInThread:[NSThread mainThread]];
-//            managedObjectContext.parentContext = mainContext;
-//        }
+        
+        if (self.parentStack != nil) {
+            managedObjectContext.parentContext = self.parentStack.managedObjectContext;
+        }
+        else {
+            if ([thread isMainThread] == NO) {
+                NSManagedObjectContext *mainContext = [self managedObjectContextForThread:[NSThread mainThread]];
+                managedObjectContext.parentContext = mainContext;
+                managedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
+            }            
+        }
 
         if (managedObjectContext.persistentStoreCoordinator == nil) {
             managedObjectContext.persistentStoreCoordinator = self.persistentStoreCoordinator;
         }
-        
+
         [dict setObject:managedObjectContext forKey:key];
     }
     
@@ -98,20 +99,48 @@ NSString * const kCDStackPersistentStoreCoordinatorKey = @"kCDStackPersistentSto
 
 - (NSManagedObjectContext *)managedObjectContext
 {
-    return [self managedObjectContextInThread:[NSThread currentThread]];
+    return [self managedObjectContextForThread:[NSThread currentThread]];
+}
+
+- (void)saveContext:(NSManagedObjectContext *)managedObjectContext
+{
+    if (managedObjectContext != nil) {
+        
+        [managedObjectContext processPendingChanges];
+        
+        NSError *error = nil;
+        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
+            // Replace this implementation with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+    }
+}
+
+- (void)saveContext
+{
+    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+    
+    [self saveContext:managedObjectContext];
+    
+    if (managedObjectContext.parentContext != nil) {
+        [managedObjectContext.parentContext performBlock:^{
+            [self saveContext:managedObjectContext.parentContext];
+        }];
+    }
 }
 
 
 #pragma mark - initialization & configuration
 
-- (NSString *)stackID
+- (id)initWithStoreClass:(Class)klass
 {
-    if (_stackID != nil) {
-        return _stackID;
+    self = [super init];
+    if (self) {
+        [self registerStoreClass:klass];
     }
-    
-    _stackID = [[NSProcessInfo processInfo] globallyUniqueString];
-    return _stackID;
+    return self;
 }
 
 - (void)registerStoreClass:(Class)klass
@@ -154,87 +183,6 @@ NSString * const kCDStackPersistentStoreCoordinatorKey = @"kCDStackPersistentSto
     }
 }
 
-- (void)saveContext:(NSManagedObjectContext *)managedObjectContext
-{
-    if (managedObjectContext != nil) {
-        NSError *error = nil;
-        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-            // Replace this implementation with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
-        }
-    }
-}
-
-- (void)saveContext
-{
-    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
-    
-    [self saveContext:managedObjectContext];
-    
-    if (managedObjectContext.parentContext != nil) {
-        [managedObjectContext.parentContext performBlock:^{
-            [self saveContext:managedObjectContext.parentContext];
-        }];
-    }
-}
-
-#pragma mark - Fetches
-
-- (void)fetch:(NSFetchRequest *)request withResults:(CDResults)block
-{
-    dispatch_queue_t global_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(global_queue, ^{
-        NSError *error = nil;
-        NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
-        NSArray *objectIDs = [self objectIDsForObjects:results];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSArray *objects = [self objectsForObjectIDs:objectIDs];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                block(objects);
-            });
-        });
-    });
-}
-
-//+ (void)fetches:(NSArray *)requests withCombinedResults:(CDCombinedResults)block
-//{
-//    dispatch_queue_t global_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-//    dispatch_group_t group = dispatch_group_create();
-//
-//    __block NSMutableDictionary *combinedResultsIDs = [NSMutableDictionary dictionary];
-//    
-//    for (NSFetchRequest *request in requests) {
-//        dispatch_group_async(group, global_queue, ^{
-//            NSError *error = nil;
-//            NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
-//            NSArray *objectIDs = [self objectIDsForObjects:fetchResults];
-//            [combinedResultsIDs setObject:objectIDs forKey:request];
-//        });
-//    }
-//
-//    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-//        NSMutableDictionary *combinedResults = [NSMutableDictionary dictionaryWithCapacity:[combinedResultsIDs count]];
-//        [combinedResultsIDs enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-//            NSArray *objects = [self objectsForObjectIDs:obj];
-//            [combinedResults setObject:objects forKey:key];
-//        }];
-//        
-//        block(combinedResults);
-//    });
-//}
-
-- (id)initWithStoreClass:(Class)klass
-{
-    self = [super init];
-    if (self) {
-        [self registerStoreClass:klass];
-    }
-    return self;
-}
-
 - (void)dealloc
 {
     [self cleanup];
@@ -245,9 +193,94 @@ NSString * const kCDStackPersistentStoreCoordinatorKey = @"kCDStackPersistentSto
     NSArray *keys =@[
     [self.stackID stringByAppendingString:kCDStackPersistentStoreCoordinatorKey],
     [self.stackID stringByAppendingString:kCDStackManagedObjectContextKey]];
- 
+    
     NSMutableDictionary *mainDict = [[NSThread mainThread] threadDictionary];
     [mainDict removeObjectsForKeys:keys];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self.parentStack
+                                                    name:NSManagedObjectContextDidSaveNotification
+                                                  object:self.managedObjectContext];
+}
+
+// Used to build the keys necessary to storing and retrieving moc and psc in an NSThread's dictionary
+- (NSString *)stackID
+{
+    if (_stackID != nil) {
+        return _stackID;
+    }
+    
+    _stackID = [[NSProcessInfo processInfo] globallyUniqueString];
+    return _stackID;
+}
+
+// A child stack will notify its parent stack of changes occuring in the child's context
+// The parent stack will automatically merge the changes on the mainThread
+- (void)setParentStack:(CDStack *)parentStack
+{
+    if (_parentStack != nil) {
+        [[NSNotificationCenter defaultCenter] removeObserver:_parentStack
+                                                        name:NSManagedObjectContextObjectsDidChangeNotification
+                                                      object:self.managedObjectContext];
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:parentStack
+                                             selector:@selector(mergeChangesFromChildStack:)
+                                                 name:NSManagedObjectContextDidSaveNotification
+                                               object:self.managedObjectContext];
+    _parentStack = parentStack;
+}
+
+- (void)mergeChangesFromChildStack:(NSNotification *)notification
+{
+    [self.managedObjectContext performSelectorOnMainThread:@selector(mergeChangesFromChildStack:)
+                                                withObject:notification
+                                             waitUntilDone:NO];
+}
+
+#pragma mark - Fetch methods
+
+- (void)fetch:(NSFetchRequest *)request withResults:(CDResults)block
+{
+    dispatch_queue_t global_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(global_queue, ^{
+        NSError *error = nil;
+        NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
+        NSArray *objectIDs = [results objectIDsFromObjects];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSArray *objects = [objectIDs objectsFromObjectIDsWithContext:self.managedObjectContext];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(objects);
+            });
+        });
+    });
+}
+
+- (void)fetches:(NSArray *)requests withCombinedResults:(CDCombinedResults)block
+{
+    dispatch_queue_t global_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_group_t group = dispatch_group_create();
+
+    __block NSMutableDictionary *combinedObjectIDs = [NSMutableDictionary dictionary];
+    
+    for (NSFetchRequest *request in requests) {
+        dispatch_group_async(group, global_queue, ^{
+            NSError *error = nil;
+            NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
+            [combinedObjectIDs setObject:[fetchResults objectIDsFromObjects] forKey:request];
+        });
+    }
+
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        NSMutableDictionary *combinedResults = [NSMutableDictionary dictionary];
+        
+        [combinedObjectIDs enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            NSArray *objects = [obj objectsFromObjectIDsWithContext:self.managedObjectContext];
+            [combinedResults setObject:objects forKey:key];
+        }];
+        
+        block(combinedResults);
+    });
 }
 
 @end

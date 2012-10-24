@@ -8,37 +8,44 @@
 
 #import "CDStack+Helpers.h"
 
-@implementation CDStack (Helpers)
+@implementation NSArray (CDStackHelpers)
 
-- (NSArray *)objectIDsForObjects:(NSArray *)objects
+- (NSArray *)objectIDsFromObjects
 {
-    NSParameterAssert([objects isKindOfClass:[NSArray class]]);
+    NSMutableArray *objectIDs = [NSMutableArray arrayWithCapacity:[self count]];
     
-    NSMutableArray *objectIDs = [NSMutableArray arrayWithCapacity:[objects count]];
-    
-    [objects enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([obj isKindOfClass:[NSManagedObject class]]) {
             NSManagedObjectID *objectID = [(NSManagedObject *)obj objectID];
             [objectIDs addObject:objectID];
         }
     }];
     
-    return objectIDs;
+    return [NSArray arrayWithArray:objectIDs];
 }
 
-- (NSArray *)objectsForObjectIDs:(NSArray *)objectIDs
+- (NSArray *)objectsFromObjectIDsWithContext:(NSManagedObjectContext *)context
 {
-    NSParameterAssert([objectIDs isKindOfClass:[NSArray class]]);
+    NSMutableArray *objects = [NSMutableArray arrayWithCapacity:[self count]];
     
-    NSMutableArray *objects = [NSMutableArray arrayWithCapacity:[objectIDs count]];
-    
-    [objectIDs enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSManagedObjectID *objectID = (NSManagedObjectID *)obj;
-        NSManagedObject *object = [self.managedObjectContext objectWithID:objectID];
-        [objects addObject:object];
+    [self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[NSManagedObjectID class]]) {
+            NSManagedObjectID *objectID = (NSManagedObjectID *)obj;
+            NSManagedObject *object = [context objectWithID:objectID];
+            [objects addObject:object];
+        }
     }];
     
-    return objects;
+    return [NSArray arrayWithArray:objects];
+}
+
++ (NSArray *)arrayByMergingArrays:(NSArray *)arrays
+{
+    NSMutableArray *merge = [NSMutableArray array];
+    for (NSArray *array in arrays) {
+        merge = [[merge arrayByAddingObjectsFromArray:array] mutableCopy];
+    }
+    return merge;
 }
 
 @end

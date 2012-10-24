@@ -8,30 +8,43 @@
 
 #import <Kiwi/Kiwi.h>
 #import "CDStack.h"
+#import "CDStack+SpecsHelpers.h"
 #import "CDCacheStore.h"
 
 SPEC_BEGIN(CDFetchingSpecs)
 
 describe(@"Blocks API", ^{
+    
+    __block CDStack *stack;
     __block NSFetchRequest *fetchRequest;
     __block NSFetchRequest *fetchRequest2;
-    
+
     beforeAll(^{
         fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Event"];
         fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timeStamp" ascending:YES]];
+        
         fetchRequest2 = [NSFetchRequest fetchRequestWithEntityName:@"Event"];
         fetchRequest2.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timeStamp" ascending:NO]];
     });
     
-    __block CDStack *stack;
+    afterAll(^{
+        fetchRequest = nil;
+        fetchRequest2 = nil;
+    });
     
     beforeEach(^{
         stack = [[CDStack alloc] initWithStoreClass:[CDCacheStore class]];
+        [stack insertObject];
+        [stack saveContext];
     });
     
+    afterEach(^{
+        [stack wipeStores];
+        stack = nil;
+    });
+
     it(@"fetches a request and passes results to a block", ^{
         __block NSArray *results = nil;
-        
         [stack fetch:fetchRequest withResults:^(NSArray *_results){
             results = _results;
         }];
@@ -39,18 +52,17 @@ describe(@"Blocks API", ^{
         [[expectFutureValue(results) shouldEventually] beNonNil];
     });
         
-    //    it(@"fetches multiple requests and calls the result block with the results combined in a dictionary keyed by request", ^{
-    //        __block NSDictionary *results = nil;
-    //        NSArray *requests = @[fetchRequest, fetchRequest2];
-    //        [CDStack fetches:requests withCombinedResults:^(NSDictionary *_results) {
-    //            results = _results;
-    //        }];
-    //
-    //        [[expectFutureValue(results) shouldEventually] beNonNil];
-    //        [[expectFutureValue([results allKeys]) should] haveCountOf:2];
-    //        [[expectFutureValue([results allValues]) should] containObjectsInArray:requests];
-    //        [[expectFutureValue([[results allValues] lastObject]) shouldNot] beEmpty];
-    //    });
+    it(@"fetches multiple requests and calls the result block with the results combined in a dictionary keyed by request", ^{
+        __block NSDictionary *results = nil;
+        NSArray *requests = @[fetchRequest, fetchRequest2];
+        [stack fetches:requests withCombinedResults:^(NSDictionary *_results) {
+            results = _results;
+        }];
+
+        [[expectFutureValue(results) shouldEventually] beNonNil];
+        [[expectFutureValue([results allKeys]) should] containObjectsInArray:requests];
+        [[expectFutureValue([[results allValues] lastObject]) should] haveCountOf:1];
+    });
 });
 
 SPEC_END

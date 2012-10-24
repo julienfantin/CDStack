@@ -8,7 +8,8 @@
 
 #import "CDStack.h"
 
-@interface CDStack (Helpers)
-- (NSArray *)objectIDsForObjects:(NSArray *)objects;
-- (NSArray *)objectsForObjectIDs:(NSArray *)objectIDs;
+@interface NSArray (CDStackHelpers)
+- (NSArray *)objectIDsFromObjects;
+- (NSArray *)objectsFromObjectIDsWithContext:(NSManagedObjectContext *)context;
++ (NSArray *)arrayByMergingArrays:(NSArray *)arrays;
 @end
