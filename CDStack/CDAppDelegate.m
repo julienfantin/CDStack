@@ -15,10 +15,11 @@
 
 @implementation CDAppDelegate
 
+@synthesize stack = _stack;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [CDStack registerStoreClass:[CDCacheStore class]];
-//    [CDStack registerStoreClass:[CDAsyncStore class]];
+    self.stack = [[CDStack alloc] initWithStoreClass:[CDCacheStore class]];
     
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
@@ -28,11 +29,11 @@
         
         UINavigationController *masterNavigationController = splitViewController.viewControllers[0];
         CDMasterViewController *controller = (CDMasterViewController *)masterNavigationController.topViewController;
-        controller.managedObjectContext = [CDStack managedObjectContext];
+        controller.managedObjectContext = self.stack.managedObjectContext;
     } else {
         UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
         CDMasterViewController *controller = (CDMasterViewController *)navigationController.topViewController;
-        controller.managedObjectContext = [CDStack managedObjectContext];
+        controller.managedObjectContext = self.stack.managedObjectContext;
     }
     
     return YES;
@@ -63,7 +64,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Saves changes in the application's managed object context before the application terminates.
-    [CDStack saveContext];
+    [self.stack saveContext];
 }
 
 @end

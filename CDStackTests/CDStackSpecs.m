@@ -13,19 +13,37 @@
 
 SPEC_BEGIN(CDStackSpecs)
 
-describe(@"CDStack", ^{
-        
-    specify(^{
-        [[CDStack persistentStoreCoordinator] shouldNotBeNil];
-        [[CDStack managedObjectModel] shouldNotBeNil];
-    });
+describe(@"CDStack initialization", ^{
     
+    __block CDStack *stack;
+    
+    beforeEach(^{
+        stack = [[CDStack alloc] initWithStoreClass:[CDCacheStore class]];
+    });
+        
+    it(@"Should stash its persistentStoreCoordinator into the mainThread's dictionary when accessed", ^{
+        id psc = stack.persistentStoreCoordinator;
+        
+        NSDictionary *dict = [[NSThread mainThread] threadDictionary];
+        __block NSMutableArray *values = [NSMutableArray array];
+        [[dict allValues] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if ([obj isKindOfClass:[NSArray class]]) {
+                values = [[values arrayByAddingObjectsFromArray:(NSArray *)obj] mutableCopy];
+            }
+            else {
+                [values addObject:obj];
+            }
+        }];
+        
+        [[values should] contain:psc];
+    });
+
     context(@"managedObjectContext", ^{
 
         __block NSManagedObjectContext *mainMOC;
         
         beforeEach(^{
-            mainMOC = [CDStack managedObjectContext];
+            mainMOC = stack.managedObjectContext;
         });
         
         afterEach(^{
@@ -38,23 +56,23 @@ describe(@"CDStack", ^{
         
         it(@"Should be registered with the store coordinator", ^{
             [[mainMOC persistentStoreCoordinator] shouldNotBeNil];
-            [[[mainMOC persistentStoreCoordinator] should] equal:[CDStack persistentStoreCoordinator]];
+            [[[mainMOC persistentStoreCoordinator] should] equal:stack.persistentStoreCoordinator];
         });
         
         context(@"The managedObjectContext accessor should return an instance unique to each thread", ^{
             
             it(@"Should work Main Thread", ^{
-                [[CDStack managedObjectContext] shouldNotBeNil];
-                [[[CDStack managedObjectContext] should] beIdenticalTo:[CDStack managedObjectContext]];
+                [stack.managedObjectContext shouldNotBeNil];
+                [[stack.managedObjectContext should] beIdenticalTo:stack.managedObjectContext];
             });
             
             it(@"Should work on GCD global queue", ^{
-                __block id main = [CDStack managedObjectContext];
+                __block id main = stack.managedObjectContext;
                 __block BOOL pass = NO;
                 dispatch_queue_t confined_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
                 dispatch_async(confined_queue, ^{
-                    BOOL isUnique = [CDStack managedObjectContext] == [CDStack managedObjectContext];
-                    BOOL isConfined = main != [CDStack managedObjectContext];
+                    BOOL isUnique = stack.managedObjectContext == stack.managedObjectContext;
+                    BOOL isConfined = main != stack.managedObjectContext;
                     pass = isUnique && isConfined;
                 });
                 
@@ -62,12 +80,12 @@ describe(@"CDStack", ^{
             });
             
             it(@"Should work on GCD private queue", ^{
-                __block id main = [CDStack managedObjectContext];
+                __block id main = stack.managedObjectContext;
                 __block BOOL pass = NO;
                 dispatch_queue_t serial_queue = dispatch_queue_create("com.julienfantin.CDStackSpecs", 0);
                 dispatch_async(serial_queue, ^{
-                    BOOL isUnique = [CDStack managedObjectContext] == [CDStack managedObjectContext];
-                    BOOL isConfined = main != [CDStack managedObjectContext];
+                    BOOL isUnique = stack.managedObjectContext == stack.managedObjectContext;
+                    BOOL isConfined = main != stack.managedObjectContext;
                     pass = isUnique && isConfined;
                 });
                 [[expectFutureValue(theValue(pass)) shouldEventually] beYes];
@@ -78,53 +96,49 @@ describe(@"CDStack", ^{
     context(@"Object creation", ^{
         
         __block NSFetchRequest *fetchRequest;
-        __block id (^insertObjectBlock)(void);
+        __block id (^insertObjectBlock)(NSManagedObjectContext *context);
         
         beforeAll(^{
             fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Event"];
             fetchRequest.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timeStamp" ascending:YES]];
-            
-            insertObjectBlock = (id) ^{
-                NSEntityDescription *e = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:[CDStack managedObjectContext]];
-                NSManagedObject *o = [[NSManagedObject alloc] initWithEntity:e insertIntoManagedObjectContext:[CDStack managedObjectContext]];
+            insertObjectBlock = (id) ^ (NSManagedObjectContext *context){
+                NSEntityDescription *e = [NSEntityDescription entityForName:@"Event" inManagedObjectContext:context];
+                NSManagedObject *o = [[NSManagedObject alloc] initWithEntity:e insertIntoManagedObjectContext:context];
                 [o setValue:[NSDate date] forKey:@"timeStamp"];
                 return o;
             };
         });
         
-        context(@"Main context", ^{
+        context(@"Same store", ^{
             
             it(@"Should insert entities in the current context", ^{
-                NSManagedObject *o = insertObjectBlock();
+                NSManagedObject *o = insertObjectBlock(stack.managedObjectContext);
                 [o shouldNotBeNil];
             });
             
             it(@"Should fetch entities after they've been inserted in the current context", ^{
-                NSManagedObject *o = insertObjectBlock();
+                NSManagedObject *o = insertObjectBlock(stack.managedObjectContext);
                 
-                [CDStack saveContext];
+                [stack saveContext];
                 
                 NSError *error = nil;
-                NSArray *results = [[CDStack managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+                NSArray *results = [stack.managedObjectContext executeFetchRequest:fetchRequest error:&error];
                 
                 [[results shouldNot] beEmpty];
                 [[[results lastObject] should] beIdenticalTo:o];
             });
-        });
-        
-        context(@"Private queues", ^{
-            
+
             it(@"Should propagate object creation in a background context to the main thread's context", ^{
                 __block NSManagedObject *o = nil;
                 
                 dispatch_queue_t serial_queue = dispatch_queue_create("com.julienfantin.bubblin", 0);
                 dispatch_sync(serial_queue, ^{
-                    o = insertObjectBlock();
-                    [CDStack saveContext];
+                    o = insertObjectBlock(stack.managedObjectContext);
+                    [stack saveContext];
                 });
                 
                 NSError *error = nil;
-                NSArray *results = [[CDStack managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+                NSArray *results = [stack.managedObjectContext executeFetchRequest:fetchRequest error:&error];
                 [[[[results lastObject] objectID] should] beIdenticalTo:o.objectID];
             });
             
@@ -134,41 +148,57 @@ describe(@"CDStack", ^{
                 
                 dispatch_queue_t serial_queue1 = dispatch_queue_create("com.julienfantin.bubblin2", 0);
                 dispatch_sync(serial_queue1, ^{
-                    o = insertObjectBlock();
-                    [CDStack saveContext];
+                    o = insertObjectBlock(stack.managedObjectContext);
+                    [stack saveContext];
                 });
                 
                 dispatch_queue_t serial_queue2 = dispatch_queue_create("com.julienfantin.bubblin3", 0);
                 dispatch_sync(serial_queue2, ^{
-                    p = insertObjectBlock();
-                    [CDStack saveContext];
+                    p = insertObjectBlock(stack.managedObjectContext);
+                    [stack saveContext];
                 });
                 
                 __block BOOL pass = NO;
                 dispatch_sync(serial_queue1, ^{
                     NSError *error = nil;
-                    NSArray *results = [[CDStack managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+                    NSArray *results = [stack.managedObjectContext executeFetchRequest:fetchRequest error:&error];
                     pass = [[(NSManagedObject *)results.lastObject objectID] isEqual:p.objectID];
                 });
                 
                 [[expectFutureValue(theValue(pass)) shouldEventually] beYes];
             });            
-        });
-        
-        context(@"GCD Global queues", ^{
+
             it(@"Should propagate object creation in a global context to the main thread's context", ^{
                 __block NSManagedObject *o = nil;
                 
                 dispatch_queue_t global_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
                 dispatch_sync(global_queue, ^{
-                    o = insertObjectBlock();
-                    [CDStack saveContext];
+                    o = insertObjectBlock(stack.managedObjectContext);
+                    [stack saveContext];
                 });
                 
                 NSError *error = nil;
-                NSArray *results = [[CDStack managedObjectContext] executeFetchRequest:fetchRequest error:&error];
+                NSArray *results = [stack.managedObjectContext executeFetchRequest:fetchRequest error:&error];
                 [[[[results lastObject] objectID] should] beIdenticalTo:o.objectID];
             });
+        });
+        
+        context(@"Different stores", ^{
+
+            it(@"Should allow nesting", ^{
+                __block NSManagedObject *o = nil;
+
+                dispatch_queue_t global_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+                dispatch_sync(global_queue, ^{
+//                    CDStack *child = [[CDStack alloc] initWithStoreClass:[CDCacheStore class]];
+//                    child.managedObjectContext.parentContext = stack.managedObjectContext;
+//                    o = insertObjectBlock(child.managedObjectContext);
+//                    [child saveContext];
+                });
+
+                
+            });
+
         });
     });
 });

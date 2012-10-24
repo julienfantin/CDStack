@@ -8,7 +8,7 @@
 
 #import <Kiwi/Kiwi.h>
 #import "CDStack.h"
-
+#import "CDCacheStore.h"
 
 SPEC_BEGIN(CDFetchingSpecs)
 
@@ -23,28 +23,34 @@ describe(@"Blocks API", ^{
         fetchRequest2.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"timeStamp" ascending:NO]];
     });
     
-   it(@"fetches a request and passes results to a block", ^{
-       __block NSArray *results = nil;
-       
-       [CDStack fetch:fetchRequest withResults:^(NSArray *_results){
-           results = _results;
-       }];
-       
-       [[expectFutureValue(results) shouldEventually] beNonNil];
-   });
+    __block CDStack *stack;
     
-//    it(@"fetches multiple requests and calls the result block with the results combined in a dictionary keyed by request", ^{
-//        __block NSDictionary *results = nil;
-//        NSArray *requests = @[fetchRequest, fetchRequest2];
-//        [CDStack fetches:requests withCombinedResults:^(NSDictionary *_results) {
-//            results = _results;
-//        }];
-//       
-//        [[expectFutureValue(results) shouldEventually] beNonNil];
-//        [[expectFutureValue([results allKeys]) should] haveCountOf:2];
-//        [[expectFutureValue([results allValues]) should] containObjectsInArray:requests];
-//        [[expectFutureValue([[results allValues] lastObject]) shouldNot] beEmpty];
-//    });
+    beforeEach(^{
+        stack = [[CDStack alloc] initWithStoreClass:[CDCacheStore class]];
+    });
+    
+    it(@"fetches a request and passes results to a block", ^{
+        __block NSArray *results = nil;
+        
+        [stack fetch:fetchRequest withResults:^(NSArray *_results){
+            results = _results;
+        }];
+        
+        [[expectFutureValue(results) shouldEventually] beNonNil];
+    });
+        
+    //    it(@"fetches multiple requests and calls the result block with the results combined in a dictionary keyed by request", ^{
+    //        __block NSDictionary *results = nil;
+    //        NSArray *requests = @[fetchRequest, fetchRequest2];
+    //        [CDStack fetches:requests withCombinedResults:^(NSDictionary *_results) {
+    //            results = _results;
+    //        }];
+    //
+    //        [[expectFutureValue(results) shouldEventually] beNonNil];
+    //        [[expectFutureValue([results allKeys]) should] haveCountOf:2];
+    //        [[expectFutureValue([results allValues]) should] containObjectsInArray:requests];
+    //        [[expectFutureValue([[results allValues] lastObject]) shouldNot] beEmpty];
+    //    });
 });
 
 SPEC_END

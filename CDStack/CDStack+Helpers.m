@@ -10,7 +10,7 @@
 
 @implementation CDStack (Helpers)
 
-+ (NSArray *)objectIDsForObjects:(NSArray *)objects
+- (NSArray *)objectIDsForObjects:(NSArray *)objects
 {
     NSParameterAssert([objects isKindOfClass:[NSArray class]]);
     
@@ -26,7 +26,7 @@
     return objectIDs;
 }
 
-+ (NSArray *)objectsForObjectIDs:(NSArray *)objectIDs
+- (NSArray *)objectsForObjectIDs:(NSArray *)objectIDs
 {
     NSParameterAssert([objectIDs isKindOfClass:[NSArray class]]);
     
@@ -34,7 +34,7 @@
     
     [objectIDs enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSManagedObjectID *objectID = (NSManagedObjectID *)obj;
-        NSManagedObject *object = [[CDStack managedObjectContext] objectWithID:objectID];
+        NSManagedObject *object = [self.managedObjectContext objectWithID:objectID];
         [objects addObject:object];
     }];
     

@@ -9,6 +9,6 @@
 #import "CDStack.h"
 
 @interface CDStack (Helpers)
-+ (NSArray *)objectIDsForObjects:(NSArray *)objects;
-+ (NSArray *)objectsForObjectIDs:(NSArray *)objectIDs;
+- (NSArray *)objectIDsForObjects:(NSArray *)objects;
+- (NSArray *)objectsForObjectIDs:(NSArray *)objectIDs;
 @end
