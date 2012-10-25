@@ -36,8 +36,8 @@
 		717B00BC16368DE90006017B /* CDStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00AD163688EB0006017B /* CDStack.m */; };
 		717B00BF163695500006017B /* CDAsyncStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00BE163695500006017B /* CDAsyncStore.m */; };
 		717B00C0163695500006017B /* CDAsyncStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00BE163695500006017B /* CDAsyncStore.m */; };
-		717B00C31636961A0006017B /* CDCacheStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00C21636961A0006017B /* CDCacheStore.m */; };
-		717B00C41636961A0006017B /* CDCacheStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00C21636961A0006017B /* CDCacheStore.m */; };
+		717B00C31636961A0006017B /* CDSQLiteStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00C21636961A0006017B /* CDSQLiteStore.m */; };
+		717B00C41636961A0006017B /* CDSQLiteStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00C21636961A0006017B /* CDSQLiteStore.m */; };
 		717B00C61636B98C0006017B /* CDStack.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 711C9478163684F400A37612 /* CDStack.xcdatamodeld */; };
 		8C2399E3604F46D3A4A078FD /* libPods-test.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF4C8166A1D24B80956645AD /* libPods-test.a */; };
 /* End PBXBuildFile section */
@@ -88,8 +88,8 @@
 		717B00AD163688EB0006017B /* CDStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDStack.m; sourceTree = "<group>"; };
 		717B00BD163695500006017B /* CDAsyncStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDAsyncStore.h; sourceTree = "<group>"; };
 		717B00BE163695500006017B /* CDAsyncStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDAsyncStore.m; sourceTree = "<group>"; };
-		717B00C11636961A0006017B /* CDCacheStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDCacheStore.h; sourceTree = "<group>"; };
-		717B00C21636961A0006017B /* CDCacheStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDCacheStore.m; sourceTree = "<group>"; };
+		717B00C11636961A0006017B /* CDSQLiteStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDSQLiteStore.h; sourceTree = "<group>"; };
+		717B00C21636961A0006017B /* CDSQLiteStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDSQLiteStore.m; sourceTree = "<group>"; };
 		717B00C516369EF30006017B /* CDPersistentStoreProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDPersistentStoreProtocol.h; sourceTree = "<group>"; };
 		717B00C71636CDF60006017B /* CDStackTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CDStackTests-Prefix.pch"; sourceTree = "<group>"; };
 		DF4C8166A1D24B80956645AD /* libPods-test.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-test.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -234,8 +234,8 @@
 				717B00C516369EF30006017B /* CDPersistentStoreProtocol.h */,
 				717B00BD163695500006017B /* CDAsyncStore.h */,
 				717B00BE163695500006017B /* CDAsyncStore.m */,
-				717B00C11636961A0006017B /* CDCacheStore.h */,
-				717B00C21636961A0006017B /* CDCacheStore.m */,
+				717B00C11636961A0006017B /* CDSQLiteStore.h */,
+				717B00C21636961A0006017B /* CDSQLiteStore.m */,
 				7162FCF51637C7750081FAEE /* CDStack+Helpers.h */,
 				7162FCF61637C7750081FAEE /* CDStack+Helpers.m */,
 			);
@@ -376,7 +376,7 @@
 				711C9480163684F400A37612 /* CDDetailViewController.m in Sources */,
 				717B00AE163688EB0006017B /* CDStack.m in Sources */,
 				717B00BF163695500006017B /* CDAsyncStore.m in Sources */,
-				717B00C31636961A0006017B /* CDCacheStore.m in Sources */,
+				717B00C31636961A0006017B /* CDSQLiteStore.m in Sources */,
 				7162FCF71637C7750081FAEE /* CDStack+Helpers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -388,7 +388,7 @@
 				711C9496163684F400A37612 /* CDStackSpecs.m in Sources */,
 				717B00BC16368DE90006017B /* CDStack.m in Sources */,
 				717B00C0163695500006017B /* CDAsyncStore.m in Sources */,
-				717B00C41636961A0006017B /* CDCacheStore.m in Sources */,
+				717B00C41636961A0006017B /* CDSQLiteStore.m in Sources */,
 				717B00C61636B98C0006017B /* CDStack.xcdatamodeld in Sources */,
 				7162FCF416371FAB0081FAEE /* CDFetchingSpecs.m in Sources */,
 				7162FCF81637C7750081FAEE /* CDStack+Helpers.m in Sources */,

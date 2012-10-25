@@ -9,7 +9,7 @@
 #import <Kiwi/Kiwi.h>
 #import "CDStack.h"
 #import "CDStack+SpecsHelpers.h"
-#import "CDCacheStore.h"
+#import "CDSQLiteStore.h"
 #import "CDAsyncStore.h"
 
 SPEC_BEGIN(CDStackSpecs)
@@ -19,7 +19,7 @@ describe(@"CDStack", ^{
     __block CDStack *stack;
     
     beforeEach(^{
-        stack = [[CDStack alloc] initWithStoreClass:[CDCacheStore class]];
+        stack = [[CDStack alloc] initWithStoreClass:[CDSQLiteStore class]];
     });
     
     afterEach(^{
@@ -95,7 +95,7 @@ describe(@"CDStack", ^{
             
             it(@"Should fetch entities after they've been inserted in the current context", ^{
                 NSManagedObject *o = [stack insertObject];
-                [stack saveContext];
+                [stack save];
                 
                 NSError *error = nil;
                 NSArray *results = [stack.managedObjectContext executeFetchRequest:fetchRequest error:&error];
@@ -110,7 +110,7 @@ describe(@"CDStack", ^{
                 dispatch_queue_t serial_queue = dispatch_queue_create("com.julienfantin.bubblin", 0);
                 dispatch_sync(serial_queue, ^{
                     o = [stack insertObject];
-                    [stack saveContext];
+                    [stack save];
                 });
                 
                 NSError *error = nil;
@@ -127,13 +127,13 @@ describe(@"CDStack", ^{
                 dispatch_queue_t serial_queue1 = dispatch_queue_create("com.julienfantin.bubblin2", 0);
                 dispatch_sync(serial_queue1, ^{
                     o = [stack insertObject];
-                    [stack saveContext];
+                    [stack save];
                 });
                 
                 dispatch_queue_t serial_queue2 = dispatch_queue_create("com.julienfantin.bubblin3", 0);
                 dispatch_sync(serial_queue2, ^{
                     p = [stack insertObject];
-                    [stack saveContext];
+                    [stack save];
                 });
                 
                 __block BOOL pass = NO;
@@ -152,7 +152,7 @@ describe(@"CDStack", ^{
                 dispatch_queue_t global_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
                 dispatch_sync(global_queue, ^{
                     o = [stack insertObject];
-                    [stack saveContext];
+                    [stack save];
                 });
                 
                 NSError *error = nil;
@@ -166,7 +166,7 @@ describe(@"CDStack", ^{
             __block CDStack *child;
             
             beforeAll(^{
-                child = [[CDStack alloc] initWithStoreClass:[CDCacheStore class]];
+                child = [[CDStack alloc] initWithStoreClass:[CDSQLiteStore class]];
                 child.parentStack = stack;
             });
             
@@ -175,27 +175,26 @@ describe(@"CDStack", ^{
                 child = nil;
             });
             
-            it(@"Should allow to compose stack", ^{
+            it(@"Should allow to compose stack by defining a parentStack", ^{
                 [[child.parentStack should] beIdenticalTo:stack];
             });
             
-            it(@"Should allow nesting", ^{
+            it(@"Should propagate changes in a child stack to its parentStack", ^{
             
-                CDStack *childStack = [[CDStack alloc] initWithStoreClass:[CDCacheStore class]];
+                CDStack *childStack = [[CDStack alloc] initWithStoreClass:[CDSQLiteStore class]];
                 childStack.parentStack = stack;
-                
-                [[[stack should] receive] mergeChangesFromChildStack:[KWAny any]];
-            
+                            
                 __block NSManagedObject *o = nil;
                 dispatch_queue_t global_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
                 dispatch_sync(global_queue, ^{
                     o = [childStack insertObject];
-                    [childStack saveContext];
+                    [childStack save];
                 });
                 
                 NSError *error = nil;
                 NSArray *childResults = [childStack.managedObjectContext executeFetchRequest:fetchRequest error:&error];
                 
+                // Wait for the notification to be processed before fetching on the parentStack
                 __block NSArray *results = nil;
                 dispatch_after(1, dispatch_get_main_queue(), ^{
                     results = [stack.managedObjectContext executeFetchRequest:fetchRequest error:nil];
@@ -204,9 +203,7 @@ describe(@"CDStack", ^{
                 [o shouldNotBeNil];
                 [[[[childResults.lastObject objectID] URIRepresentation] should] equal:[o.objectID URIRepresentation]];
                 [[[[results.lastObject objectID] URIRepresentation] shouldEventually] equal:[o.objectID URIRepresentation]];
-
             });
-
         });
     });
 });

@@ -16,7 +16,13 @@ extern NSString * const kCDStackManagedObjectContextKey;
 typedef void (^CDResults) (NSArray *results);
 typedef void (^CDCombinedResults) (NSDictionary *results);
 
-@interface CDStack : NSObject
+// Fetching API
+@protocol CDFetchable <NSObject>
+- (void)fetch:(NSFetchRequest *)request withResults:(CDResults)block;
+- (void)fetches:(NSArray *)requests withCombinedResults:(CDCombinedResults)block;
+@end
+
+@interface CDStack : NSObject <CDFetchable>
 
 + (NSURL *)managedObjectModelURL;
 + (NSManagedObjectModel *)managedObjectModel;
@@ -26,11 +32,7 @@ typedef void (^CDCombinedResults) (NSDictionary *results);
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 - (id)initWithStoreClass:(Class)klass;
-- (void)saveContext;
-- (void)mergeChangesFromChildStack:(NSNotification *)notification;
+- (void)save;
 - (void)cleanup;
-
-- (void)fetch:(NSFetchRequest *)request withResults:(CDResults)block;
-- (void)fetches:(NSArray *)requests withCombinedResults:(CDCombinedResults)block;
 
 @end

@@ -9,7 +9,7 @@
 #import <Kiwi/Kiwi.h>
 #import "CDStack.h"
 #import "CDStack+SpecsHelpers.h"
-#import "CDCacheStore.h"
+#import "CDSQLiteStore.h"
 
 SPEC_BEGIN(CDFetchingSpecs)
 
@@ -33,9 +33,9 @@ describe(@"Blocks API", ^{
     });
     
     beforeEach(^{
-        stack = [[CDStack alloc] initWithStoreClass:[CDCacheStore class]];
+        stack = [[CDStack alloc] initWithStoreClass:[CDSQLiteStore class]];
         [stack insertObject];
-        [stack saveContext];
+        [stack save];
     });
     
     afterEach(^{

@@ -9,6 +9,6 @@
 #import <CoreData/CoreData.h>
 #import "CDStack.h"
 
-@interface CDCacheStore : NSPersistentStore <CDPersistentStore>
+@interface CDSQLiteStore : NSPersistentStore <CDPersistentStore>
 
 @end

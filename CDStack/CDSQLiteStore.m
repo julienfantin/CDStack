@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 Julien Fantin. All rights reserved.
 //
 
-#import "CDCacheStore.h"
+#import "CDSQLiteStore.h"
 
-@interface CDCacheStore ()
+@interface CDSQLiteStore ()
 + (NSURL *)applicationDocumentsDirectory;
 @end
 
-@implementation CDCacheStore
+@implementation CDSQLiteStore
 
 + (NSString *)type
 {

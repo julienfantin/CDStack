@@ -10,7 +10,7 @@
 
 #import "CDMasterViewController.h"
 
-#import "CDCacheStore.h"
+#import "CDSQLiteStore.h"
 #import "CDAsyncStore.h"
 
 @implementation CDAppDelegate
@@ -19,7 +19,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.stack = [[CDStack alloc] initWithStoreClass:[CDCacheStore class]];
+    self.stack = [[CDStack alloc] initWithStoreClass:[CDSQLiteStore class]];
     
     // Override point for customization after application launch.
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
@@ -64,7 +64,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Saves changes in the application's managed object context before the application terminates.
-    [self.stack saveContext];
+    [self.stack save];
 }
 
 @end

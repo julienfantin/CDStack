@@ -8,7 +8,7 @@
 
 #import "CDStack.h"
 #import "CDStack+Helpers.h"
-#import "CDCacheStore.h"
+#import "CDSQLiteStore.h"
 
 NSString * const kCDStackManagedObjectContextKey = @"kCDStackManagedObjectContextKey";
 NSString * const kCDStackPersistentStoreCoordinatorKey = @"kCDStackPersistentStoreCoordinatorKey";
@@ -17,6 +17,7 @@ NSString * const kCDStackPersistentStoreCoordinatorKey = @"kCDStackPersistentSto
 - (void)registerStoreClass:(Class)klass;
 - (NSManagedObjectContext *)managedObjectContextForThread:(NSThread *)thread;
 - (void)saveContext:(NSManagedObjectContext *)context;
+- (void)mergeChangesFromChildStack:(NSNotification *)notification;
 @property (readonly, strong, nonatomic) NSString *stackID;
 @end
 
@@ -118,7 +119,7 @@ NSString * const kCDStackPersistentStoreCoordinatorKey = @"kCDStackPersistentSto
     }
 }
 
-- (void)saveContext
+- (void)save
 {
     NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     
