@@ -39,7 +39,7 @@
 		717B00C31636961A0006017B /* CDSQLiteStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00C21636961A0006017B /* CDSQLiteStore.m */; };
 		717B00C41636961A0006017B /* CDSQLiteStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B00C21636961A0006017B /* CDSQLiteStore.m */; };
 		717B00C61636B98C0006017B /* CDStack.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 711C9478163684F400A37612 /* CDStack.xcdatamodeld */; };
-		8C2399E3604F46D3A4A078FD /* libPods-test.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF4C8166A1D24B80956645AD /* libPods-test.a */; };
+		7DE3051EFED045E5A74D3786 /* libPods-CDStackTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF50EA11095745FAAFA36F2C /* libPods-CDStackTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +92,8 @@
 		717B00C21636961A0006017B /* CDSQLiteStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDSQLiteStore.m; sourceTree = "<group>"; };
 		717B00C516369EF30006017B /* CDPersistentStoreProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDPersistentStoreProtocol.h; sourceTree = "<group>"; };
 		717B00C71636CDF60006017B /* CDStackTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CDStackTests-Prefix.pch"; sourceTree = "<group>"; };
+		BF50EA11095745FAAFA36F2C /* libPods-CDStackTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CDStackTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA08C1166DC04C649B3A2E62 /* Pods-CDStackTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CDStackTests.xcconfig"; path = "Pods/Pods-CDStackTests.xcconfig"; sourceTree = SOURCE_ROOT; };
 		DF4C8166A1D24B80956645AD /* libPods-test.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-test.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6457E3041B34FD3B9D513E0 /* Pods-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test.xcconfig"; path = "Pods/Pods-test.xcconfig"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -116,7 +118,7 @@
 				711C9489163684F400A37612 /* UIKit.framework in Frameworks */,
 				711C948A163684F400A37612 /* Foundation.framework in Frameworks */,
 				711C948B163684F400A37612 /* CoreData.framework in Frameworks */,
-				8C2399E3604F46D3A4A078FD /* libPods-test.a in Frameworks */,
+				7DE3051EFED045E5A74D3786 /* libPods-CDStackTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +133,7 @@
 				711C9457163684F400A37612 /* Frameworks */,
 				711C9455163684F400A37612 /* Products */,
 				F6457E3041B34FD3B9D513E0 /* Pods-test.xcconfig */,
+				CA08C1166DC04C649B3A2E62 /* Pods-CDStackTests.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -152,6 +155,7 @@
 				711C945E163684F400A37612 /* CoreData.framework */,
 				711C9487163684F400A37612 /* SenTestingKit.framework */,
 				DF4C8166A1D24B80956645AD /* libPods-test.a */,
+				BF50EA11095745FAAFA36F2C /* libPods-CDStackTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -184,10 +188,10 @@
 		711C948E163684F400A37612 /* CDStackTests */ = {
 			isa = PBXGroup;
 			children = (
-				7162FCFB16383E490081FAEE /* CDStack+SpecsHelpers.h */,
-				7162FCFC16383E490081FAEE /* CDStack+SpecsHelpers.m */,
 				711C9495163684F400A37612 /* CDStackSpecs.m */,
 				7162FCF316371FAB0081FAEE /* CDFetchingSpecs.m */,
+				7162FCFB16383E490081FAEE /* CDStack+SpecsHelpers.h */,
+				7162FCFC16383E490081FAEE /* CDStack+SpecsHelpers.m */,
 				711C948F163684F400A37612 /* Supporting Files */,
 			);
 			path = CDStackTests;
@@ -232,14 +236,22 @@
 				717B00AC163688EB0006017B /* CDStack.h */,
 				717B00AD163688EB0006017B /* CDStack.m */,
 				717B00C516369EF30006017B /* CDPersistentStoreProtocol.h */,
-				717B00BD163695500006017B /* CDAsyncStore.h */,
-				717B00BE163695500006017B /* CDAsyncStore.m */,
-				717B00C11636961A0006017B /* CDSQLiteStore.h */,
-				717B00C21636961A0006017B /* CDSQLiteStore.m */,
+				71F61C90163A9DBB00E35775 /* Persistent Stores */,
 				7162FCF51637C7750081FAEE /* CDStack+Helpers.h */,
 				7162FCF61637C7750081FAEE /* CDStack+Helpers.m */,
 			);
 			name = CoreDataStack;
+			sourceTree = "<group>";
+		};
+		71F61C90163A9DBB00E35775 /* Persistent Stores */ = {
+			isa = PBXGroup;
+			children = (
+				717B00BD163695500006017B /* CDAsyncStore.h */,
+				717B00BE163695500006017B /* CDAsyncStore.m */,
+				717B00C11636961A0006017B /* CDSQLiteStore.h */,
+				717B00C21636961A0006017B /* CDSQLiteStore.m */,
+			);
+			name = "Persistent Stores";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -270,7 +282,7 @@
 				711C9482163684F400A37612 /* Frameworks */,
 				711C9483163684F400A37612 /* Resources */,
 				711C9484163684F400A37612 /* ShellScript */,
-				21D06B84560E48E59D12506A /* Copy Pods Resources */,
+				812D12EF8AF848EAB200A210 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -335,20 +347,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		21D06B84560E48E59D12506A /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-test-resources.sh\"\n";
-		};
 		711C9484163684F400A37612 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -361,6 +359,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		812D12EF8AF848EAB200A210 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-CDStackTests-resources.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -520,7 +532,7 @@
 		};
 		711C949D163684F400A37612 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F6457E3041B34FD3B9D513E0 /* Pods-test.xcconfig */;
+			baseConfigurationReference = CA08C1166DC04C649B3A2E62 /* Pods-CDStackTests.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/CDStack.app/CDStack";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -541,7 +553,7 @@
 		};
 		711C949E163684F400A37612 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F6457E3041B34FD3B9D513E0 /* Pods-test.xcconfig */;
+			baseConfigurationReference = CA08C1166DC04C649B3A2E62 /* Pods-CDStackTests.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/CDStack.app/CDStack";
 				FRAMEWORK_SEARCH_PATHS = (

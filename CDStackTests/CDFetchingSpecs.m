@@ -6,12 +6,14 @@
 //  Copyright (c) 2012 Julien Fantin. All rights reserved.
 //
 
-#import <Kiwi/Kiwi.h>
+#import <Specta/Specta.h>
+#define EXP_SHORTHAND
+#import <Expecta/Expecta.h>
 #import "CDStack.h"
 #import "CDStack+SpecsHelpers.h"
 #import "CDSQLiteStore.h"
 
-SPEC_BEGIN(CDFetchingSpecs)
+SpecBegin(CDFetchingSpecs)
 
 describe(@"Blocks API", ^{
     
@@ -49,7 +51,7 @@ describe(@"Blocks API", ^{
             results = _results;
         }];
         
-        [[expectFutureValue(results) shouldEventually] beNonNil];
+        expect(results).willNot.beNil();
     });
         
     it(@"fetches multiple requests and calls the result block with the results combined in a dictionary keyed by request", ^{
@@ -59,10 +61,11 @@ describe(@"Blocks API", ^{
             results = _results;
         }];
 
-        [[expectFutureValue(results) shouldEventually] beNonNil];
-        [[expectFutureValue([results allKeys]) should] containObjectsInArray:requests];
-        [[expectFutureValue([[results allValues] lastObject]) should] haveCountOf:1];
+        expect(results).willNot.beNil();
+        expect(results.allKeys).will.contain([requests objectAtIndex:0]);
+        expect(results.allKeys).will.contain([requests objectAtIndex:1]);
+        expect(results.allValues.lastObject).will.haveCountOf(1);
     });
 });
 
-SPEC_END
+SpecEnd

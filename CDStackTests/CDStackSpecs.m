@@ -6,13 +6,16 @@
 //  Copyright (c) 2012 Julien Fantin. All rights reserved.
 //
 
-#import <Kiwi/Kiwi.h>
+#import <Specta/Specta.h>
+#define EXP_SHORTHAND
+#import <Expecta/Expecta.h>
+
 #import "CDStack.h"
 #import "CDStack+SpecsHelpers.h"
 #import "CDSQLiteStore.h"
 #import "CDAsyncStore.h"
 
-SPEC_BEGIN(CDStackSpecs)
+SpecBegin(CDStackSpecs)
 
 describe(@"CDStack", ^{
     
@@ -31,7 +34,7 @@ describe(@"CDStack", ^{
         
         it(@"Should stash its persistentStoreCoordinator into the mainThread's dictionary when accessed", ^{
             id psc = stack.persistentStoreCoordinator;
-            [[[[[NSThread mainThread] threadDictionary] allValues] should] contain:psc];
+            expect([[[NSThread mainThread] threadDictionary] allValues]).to.contain(psc);
         });
 
         context(@"managedObjectContext", ^{
@@ -41,19 +44,19 @@ describe(@"CDStack", ^{
                 mainContext = stack.managedObjectContext;
             });
 
-            specify(^{
-                [mainContext shouldNotBeNil];
+            specify(@"should not be nil", ^{
+                expect(mainContext).notTo.beNil();
             });
             
             it(@"Should be registered with the store coordinator", ^{
-                [[[mainContext persistentStoreCoordinator] should] equal:stack.persistentStoreCoordinator];
+                expect(mainContext.persistentStoreCoordinator).to.equal(stack.persistentStoreCoordinator);;
             });
             
             context(@"Instances are per thread", ^{
                 
                 it(@"Should work on Main Thread", ^{
-                    [stack.managedObjectContext shouldNotBeNil];
-                    [[stack.managedObjectContext should] beIdenticalTo:stack.managedObjectContext];
+                    expect(stack.managedObjectContext).notTo.beNil();
+                    expect(stack.managedObjectContext).to.equal(stack.managedObjectContext);
                 });
                 
                 it(@"Should work in GCD global queues", ^{
@@ -65,7 +68,7 @@ describe(@"CDStack", ^{
                         pass = isUnique && isConfined;
                     });
                     
-                    [[expectFutureValue(theValue(pass)) shouldEventually] beYes];
+                    expect(pass).will.beTruthy();
                 });
                 
                 it(@"Should work in GCD private queues", ^{
@@ -76,7 +79,7 @@ describe(@"CDStack", ^{
                         BOOL isConfined = mainContext != stack.managedObjectContext;
                         pass = isUnique && isConfined;
                     });
-                    [[expectFutureValue(theValue(pass)) shouldEventually] beYes];
+                    expect(pass).will.beTruthy();
                 });
             });
         });
@@ -100,8 +103,8 @@ describe(@"CDStack", ^{
                 NSError *error = nil;
                 NSArray *results = [stack.managedObjectContext executeFetchRequest:fetchRequest error:&error];
                 
-                [o shouldNotBeNil];
-                [[[[results.lastObject objectID] URIRepresentation] should] equal:[o.objectID URIRepresentation]];
+                expect(o).notTo.beNil();
+                expect([results.lastObject objectID].URIRepresentation).to.equal([o.objectID URIRepresentation]);;
             });
 
             it(@"Should propagate object creation in a background context to the main thread's context", ^{
@@ -115,9 +118,8 @@ describe(@"CDStack", ^{
                 
                 NSError *error = nil;
                 NSArray *results = [stack.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-                
-                [o shouldNotBeNil];
-                [[[[[results lastObject] objectID] URIRepresentation] should] equal:[o.objectID URIRepresentation]];
+                expect(o).notTo.beNil();
+                expect([results.lastObject objectID].URIRepresentation).to.equal(o.objectID.URIRepresentation);
             });
             
             it(@"Should propagate object creation in between background contexts", ^{
@@ -143,7 +145,7 @@ describe(@"CDStack", ^{
                     pass = [[[(NSManagedObject *)results.lastObject objectID] URIRepresentation] isEqual:[p.objectID URIRepresentation]];
                 });
                 
-                [[expectFutureValue(theValue(pass)) shouldEventually] beYes];
+                expect(pass).will.beTruthy();
             });            
 
             it(@"Should propagate object creation in a global context to the main thread's context", ^{
@@ -157,7 +159,7 @@ describe(@"CDStack", ^{
                 
                 NSError *error = nil;
                 NSArray *results = [stack.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-                [[[[[results lastObject] objectID] URIRepresentation] should] equal:[o.objectID URIRepresentation]];
+                expect([results.lastObject objectID].URIRepresentation).to.equal(o.objectID.URIRepresentation);
             });
         });
         
@@ -165,18 +167,18 @@ describe(@"CDStack", ^{
 
             __block CDStack *child;
             
-            beforeAll(^{
+            beforeEach(^{
                 child = [[CDStack alloc] initWithStoreClass:[CDSQLiteStore class]];
                 child.parentStack = stack;
             });
             
-            afterAll(^{
+            afterEach(^{
                 [child wipeStores];
                 child = nil;
             });
             
             it(@"Should allow to compose stack by defining a parentStack", ^{
-                [[child.parentStack should] beIdenticalTo:stack];
+                expect(child.parentStack == stack).to.beTruthy();
             });
             
             it(@"Should propagate changes in a child stack to its parentStack", ^{
@@ -200,12 +202,12 @@ describe(@"CDStack", ^{
                     results = [stack.managedObjectContext executeFetchRequest:fetchRequest error:nil];
                 });
                 
-                [o shouldNotBeNil];
-                [[[[childResults.lastObject objectID] URIRepresentation] should] equal:[o.objectID URIRepresentation]];
-                [[[[results.lastObject objectID] URIRepresentation] shouldEventually] equal:[o.objectID URIRepresentation]];
+                expect(o).notTo.beNil();
+                expect([childResults.lastObject objectID].URIRepresentation).to.equal(o.objectID.URIRepresentation);
+                expect([results.lastObject objectID].URIRepresentation).will.equal(o.objectID.URIRepresentation);
             });
         });
     });
 });
 
-SPEC_END
+SpecEnd

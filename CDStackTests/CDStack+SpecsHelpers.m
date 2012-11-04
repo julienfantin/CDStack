@@ -29,7 +29,6 @@
         
         if (![[NSFileManager defaultManager] removeItemAtPath:store.URL.path error:&error]) {
             NSLog(@"Couldn't delete store file\n%@",error);
-            abort();
         }
     }
 }
