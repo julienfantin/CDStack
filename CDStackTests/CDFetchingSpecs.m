@@ -6,9 +6,7 @@
 //  Copyright (c) 2012 Julien Fantin. All rights reserved.
 //
 
-#import <Specta/Specta.h>
-#define EXP_SHORTHAND
-#import <Expecta/Expecta.h>
+#import "CDStackSpecs.h"
 #import "CDStack.h"
 #import "CDStack+SpecsHelpers.h"
 #import "CDSQLiteStore.h"

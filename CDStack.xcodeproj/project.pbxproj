@@ -79,6 +79,7 @@
 		711C9490163684F400A37612 /* CDStackTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CDStackTests-Info.plist"; sourceTree = "<group>"; };
 		711C9492163684F400A37612 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		711C9495163684F400A37612 /* CDStackSpecs.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CDStackSpecs.m; sourceTree = "<group>"; };
+		71611FCF1646EA67005A88D3 /* CDStackSpecs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDStackSpecs.h; sourceTree = "<group>"; };
 		7162FCF316371FAB0081FAEE /* CDFetchingSpecs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDFetchingSpecs.m; sourceTree = "<group>"; };
 		7162FCF51637C7750081FAEE /* CDStack+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CDStack+Helpers.h"; sourceTree = "<group>"; };
 		7162FCF61637C7750081FAEE /* CDStack+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CDStack+Helpers.m"; sourceTree = "<group>"; };
@@ -94,8 +95,6 @@
 		717B00C71636CDF60006017B /* CDStackTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CDStackTests-Prefix.pch"; sourceTree = "<group>"; };
 		BF50EA11095745FAAFA36F2C /* libPods-CDStackTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CDStackTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA08C1166DC04C649B3A2E62 /* Pods-CDStackTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CDStackTests.xcconfig"; path = "Pods/Pods-CDStackTests.xcconfig"; sourceTree = SOURCE_ROOT; };
-		DF4C8166A1D24B80956645AD /* libPods-test.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-test.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		F6457E3041B34FD3B9D513E0 /* Pods-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test.xcconfig"; path = "Pods/Pods-test.xcconfig"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,7 +131,6 @@
 				711C948E163684F400A37612 /* CDStackTests */,
 				711C9457163684F400A37612 /* Frameworks */,
 				711C9455163684F400A37612 /* Products */,
-				F6457E3041B34FD3B9D513E0 /* Pods-test.xcconfig */,
 				CA08C1166DC04C649B3A2E62 /* Pods-CDStackTests.xcconfig */,
 			);
 			sourceTree = "<group>";
@@ -154,7 +152,6 @@
 				711C945C163684F400A37612 /* CoreGraphics.framework */,
 				711C945E163684F400A37612 /* CoreData.framework */,
 				711C9487163684F400A37612 /* SenTestingKit.framework */,
-				DF4C8166A1D24B80956645AD /* libPods-test.a */,
 				BF50EA11095745FAAFA36F2C /* libPods-CDStackTests.a */,
 			);
 			name = Frameworks;
@@ -188,6 +185,7 @@
 		711C948E163684F400A37612 /* CDStackTests */ = {
 			isa = PBXGroup;
 			children = (
+				71611FCF1646EA67005A88D3 /* CDStackSpecs.h */,
 				711C9495163684F400A37612 /* CDStackSpecs.m */,
 				7162FCF316371FAB0081FAEE /* CDFetchingSpecs.m */,
 				7162FCFB16383E490081FAEE /* CDStack+SpecsHelpers.h */,
@@ -236,9 +234,9 @@
 				717B00AC163688EB0006017B /* CDStack.h */,
 				717B00AD163688EB0006017B /* CDStack.m */,
 				717B00C516369EF30006017B /* CDPersistentStoreProtocol.h */,
-				71F61C90163A9DBB00E35775 /* Persistent Stores */,
 				7162FCF51637C7750081FAEE /* CDStack+Helpers.h */,
 				7162FCF61637C7750081FAEE /* CDStack+Helpers.m */,
+				71F61C90163A9DBB00E35775 /* Persistent Stores */,
 			);
 			name = CoreDataStack;
 			sourceTree = "<group>";
