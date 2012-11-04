@@ -233,7 +233,7 @@ NSString * const kCDStackPersistentStoreCoordinatorKey = @"kCDStackPersistentSto
 
 - (void)mergeChangesFromChildStack:(NSNotification *)notification
 {
-    [self.managedObjectContext performSelectorOnMainThread:@selector(mergeChangesFromChildStack:)
+    [self.managedObjectContext performSelectorOnMainThread:@selector(mergeChangesFromContextDidSaveNotification:)
                                                 withObject:notification
                                              waitUntilDone:NO];
 }
@@ -268,6 +268,9 @@ NSString * const kCDStackPersistentStoreCoordinatorKey = @"kCDStackPersistentSto
         dispatch_group_async(group, global_queue, ^{
             NSError *error = nil;
             NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request error:&error];
+            if (error != nil) {
+                abort();
+            }
             [combinedObjectIDs setObject:[fetchResults objectIDsFromObjects] forKey:request];
         });
     }

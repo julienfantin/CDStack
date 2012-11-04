@@ -1,14 +1,9 @@
-platform :ios, '6.0'
+platform :ios, '5.0'
 
-target :release do
-  link_with 'CDStack'
+target :CDStack do
 end
 
-target :debug do
-  link_with 'CDStack'
-end
-
-target :test, :exclusive => true do
-  link_with 'CDStackTests'
-  pod 'Kiwi'
+target :CDStackTests, :exclusive => true do
+  pod 'Specta'
+  pod 'Expecta'
 end

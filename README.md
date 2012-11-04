@@ -3,7 +3,7 @@
 
 
 ## Rationale
-CDStacks aims to make it easy to use a simple CoreData configuration, and easier to manage complex setups with possibly asynchronous data stores.
+CDStack aims to make it easy to use a simple CoreData configuration, and easier to manage complex setups with possibly asynchronous data stores.
 
 What's commonly described as a CoreData stack usually refers to an instance of `NSPersistentStoreCoordinator`, its configuration and related objects.
 
@@ -42,4 +42,3 @@ The details of this particular stack are defined on `CDSQLiteStore` which adopts
   - Background fetches and saves using Grand Central Dispatch
   - Automatically handle `NSManagedObjectContext` thread confinment
 - UI-friendly fetching with GCD
-
